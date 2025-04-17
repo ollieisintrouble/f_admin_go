@@ -2,8 +2,8 @@ package main
 
 import (
 	"f_admin_go/internal/api"
+	"f_admin_go/internal/config"
 	"f_admin_go/internal/db"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -17,16 +17,25 @@ func main() {
 		WriteTimeout: 30 * time.Second,
 	}
 
-	fmt.Println("Server running on port 8080")
-	connectStr := ""
-	fmt.Println("Connecting to database...")
-	if err := db.InitDB(connectStr); err != nil {
+	cfg := config.LoadConfig()
+
+	log.Printf("Server running on port %s", cfg.Port)
+	log.Printf("Environment: %s", cfg.Environment)
+	log.Println("Connecting to database...")
+
+	if err := db.InitDB(cfg.DBURL); err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	} else {
 		log.Println("Database connection successful")
 	}
+	defer func() {
+		if err := db.DB.Close(); err != nil {
+			log.Fatalf("Failed to close database connection: %v", err)
+		}
+		log.Println("Database connection closed")
+	}()
 
-	// todo: re-connect db if fail
+	// TODO: Add healthcheck cycle
 
 	log.Fatal(server.ListenAndServe())
 }
@@ -36,7 +45,6 @@ func routes() *http.ServeMux {
 	mux.HandleFunc("/api/asset", api.HandleAssetRequest)
 	// mux.HandleFunc("/api/product", api.HandleProductRequest)
 	// mux.HandleFunc("/api/transaction", api.HandleTransactionRequest)
-	// mux.HandleFunc("/api/user", api.HandleAssetRequest)
 	mux.HandleFunc("/", handleNotFound)
 	return mux
 }

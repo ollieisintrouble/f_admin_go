@@ -16,8 +16,8 @@ func HandleAssetRequest(w http.ResponseWriter, r *http.Request) {
 		createAsset(w, r)
 	// case http.MethodPut:
 	// 	updateAsset(w, r)
-	// case http.MethodDelete:
-	// 	deleteAsset(w, r)
+	case http.MethodDelete:
+		deleteAsset(w, r)
 	case http.MethodOptions:
 		w.WriteHeader(http.StatusOK)
 		return

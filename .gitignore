@@ -1,0 +1,19 @@
+# Ignore env files (used locally, not committed)
+.env
+.env.*    # optional: .env.local, .env.dev, etc.
+
+# JSON/TOML/YAML secrets config
+*.secrets.*
+*.local.*
+
+# OS & editor stuff
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Go build artifacts
+bin/
+*.exe
+*.out
+*.test

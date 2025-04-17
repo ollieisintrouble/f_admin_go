@@ -98,6 +98,20 @@ func createAsset(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 }
 
-// TODO: PUT request for asset
-
 // TODO: DELETE request for asset
+func deleteAsset(w http.ResponseWriter, r *http.Request) {
+	var req models.GetAssetRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request", http.StatusBadRequest)
+		return
+	}
+
+	_, err := db.DB.Exec("DELETE FROM assets WHERE id = $1", req.AssetId)
+	if err != nil {
+		http.Error(w, "Database delete error", http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
+// TODO: PUT request for asset
