@@ -20,5 +20,6 @@ func InitDB(connectStr string) error {
 		return fmt.Errorf("failed to ping database: %w", err)
 	}
 
+	fmt.Println("Successfully connected to the database!")
 	return nil
 }
