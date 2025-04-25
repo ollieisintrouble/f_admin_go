@@ -1,4 +1,4 @@
-package assets
+package transactions
 
 import (
 	"encoding/json"
@@ -8,14 +8,14 @@ import (
 	"net/http"
 )
 
-func handlePatchAsset(w http.ResponseWriter, r *http.Request) {
-	var req models.AssetDTO
+func handlePatchTransaction(w http.ResponseWriter, r *http.Request) {
+	var req models.TransactionDTO
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		shared.WriteError(w, http.StatusBadRequest, "Invalid request")
 		return
 	}
 
-	_, err := db.DB.Exec("UPDATE assets SET title = $1, cost = $2, description = $3, status = $4, type = $5, purchase_date = $6 WHERE id = $7", req.Title, req.Cost, req.Description, req.Status, req.Type, req.PurchaseDate, req.ID)
+	_, err := db.DB.Exec("UPDATE transactions SET amount = $1, description = $2, method = $3, status = $4, type = $5, recorded_date = $6 WHERE id = $7", req.Amount, req.Description, req.Method, req.Status, req.Type, req.RecordedDate, req.ID)
 	if err != nil {
 		shared.WriteError(w, http.StatusInternalServerError, "Database update error")
 		return

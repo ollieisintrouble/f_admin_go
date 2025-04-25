@@ -1,21 +1,38 @@
 package db
 
 import (
+	"database/sql"
 	"time"
 )
 
 type Asset struct {
-	Id          int64     `json:"id" db:"id"`
-	Title       string    `json:"title" db:"title"`
-	Cost        int64     `json:"cost" db:"cost"`
-	Description string    `json:"description" db:"description"`
-	CreatedBy   string    `json:"createdBy" db:"created_by"`
-	CreatedAt   time.Time `json:"createdAt" db:"created_at"`
-	UpdatedAt   time.Time `json:"updatedAt" db:"updated_at"`
+	ID           int64          `json:"id" db:"id"`
+	Title        string         `json:"title" db:"title"`
+	Cost         int64          `json:"cost" db:"cost"`
+	Description  sql.NullString `json:"description" db:"description"`
+	CreatedBy    sql.NullString `json:"createdBy" db:"created_by"`
+	CreatedAt    time.Time      `json:"createdAt" db:"created_at"`
+	UpdatedAt    time.Time      `json:"updatedAt" db:"updated_at"`
+	Status       sql.NullString `json:"status" db:"status"`
+	Type         sql.NullString `json:"type" db:"type"`
+	PurchaseDate sql.NullTime   `json:"purchaseDate" db:"purchase_date"`
+}
+
+type Transaction struct {
+	ID           int64          `json:"id" db:"id"`
+	Amount       int64          `json:"amount" db:"amount"`
+	Description  sql.NullString `json:"description" db:"description"`
+	Method       sql.NullString `json:"method" db:"method"`
+	CreatedBy    sql.NullString `json:"createdBy" db:"created_by"`
+	CreatedAt    time.Time      `json:"createdAt" db:"created_at"`
+	UpdatedAt    time.Time      `json:"updatedAt" db:"updated_at"`
+	Status       sql.NullString `json:"status" db:"status"`
+	Type         sql.NullString `json:"type" db:"type"`
+	RecordedDate sql.NullTime   `json:"purchaseDate" db:"purchase_date"`
 }
 
 type Product struct {
-	Id          int64     `json:"id" db:"id"`
+	ID          int64     `json:"id" db:"id"`
 	ProductName string    `json:"productName" db:"product_name"`
 	Description string    `json:"description" db:"description"`
 	ProductUrl  string    `json:"productUrl" db:"product_url"`
@@ -24,18 +41,8 @@ type Product struct {
 	UpdatedAt   time.Time `json:"updatedAt" db:"updated_at"`
 }
 
-type Transactions struct {
-	Id          int64     `json:"id" db:"id"`
-	Amount      int64     `json:"amount" db:"amount"`
-	Description string    `json:"description" db:"description"`
-	Method      string    `json:"method" db:"method"`
-	CreatedBy   string    `json:"createdBy" db:"created_by"`
-	CreatedAt   time.Time `json:"createdAt" db:"created_at"`
-	UpdatedAt   time.Time `json:"updatedAt" db:"updated_at"`
-}
-
 type User struct {
-	Id           string    `json:"id" db:"id"`
+	ID           string    `json:"id" db:"id"`
 	Username     string    `json:"username" db:"username"`
 	PasswordHash string    `json:"passwordHash" db:"password_hash"`
 	FullName     string    `json:"fullName" db:"full_name"`

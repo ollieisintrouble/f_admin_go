@@ -3,6 +3,7 @@ package main
 import (
 	"f_admin_go/internal/api/assets"
 	"f_admin_go/internal/api/shared"
+	"f_admin_go/internal/api/transactions"
 	"f_admin_go/internal/config"
 	"f_admin_go/internal/db"
 	"log"
@@ -44,8 +45,8 @@ func main() {
 func routes() *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/assets", shared.HandleEntity(&assets.Handler{}))
+	mux.HandleFunc("/api/transactions", shared.HandleEntity(&transactions.Handler{}))
 	// mux.HandleFunc("/api/product", api.HandleProductRequest)
-	// mux.HandleFunc("/api/transaction", api.HandleTransactionRequest)
 	mux.HandleFunc("/", handleNotFound)
 	return mux
 }
