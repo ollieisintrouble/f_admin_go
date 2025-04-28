@@ -8,7 +8,10 @@ import (
 )
 
 func handleGetAsset(w http.ResponseWriter, r *http.Request) {
-	rows, err := db.DB.Query("SELECT * FROM assets")
+	orgIDStr := r.Context().Value(shared.OrgIDContextKey).(string)
+	orgID := shared.ConvertOrgIDToInt(orgIDStr)
+
+	rows, err := db.DB.Query("SELECT * FROM assets WHERE organization = $1", orgID)
 	if err != nil {
 		shared.WriteError(w, http.StatusInternalServerError, "Database query error")
 		return
@@ -22,7 +25,7 @@ func handleGetAsset(w http.ResponseWriter, r *http.Request) {
 			shared.WriteError(w, http.StatusInternalServerError, "Database scan error")
 			return
 		}
-		response = append(response, ConvertAsset(asset))
+		response = append(response, ConvertAssetFromDB(asset))
 	}
 
 	if len(response) == 0 {

@@ -22,7 +22,7 @@ func handleGetTransaction(w http.ResponseWriter, r *http.Request) {
 			shared.WriteError(w, http.StatusInternalServerError, "Database scan error")
 			return
 		}
-		responses = append(responses, ConvertTransaction(transaction))
+		responses = append(responses, ConvertTransactionFromDB(transaction))
 	}
 
 	if len(responses) == 0 {

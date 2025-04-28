@@ -17,11 +17,15 @@ func handleCreateTransaction(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := db.DB.QueryRow("INSERT INTO transactionns (amount, description, method, created_by, status, type, recorded_date) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id", req.Amount, req.Description, req.Method, req.CreatedBy, req.Status, req.Type, req.RecordedDate).Scan(&res.ID)
+	transaction := ConvertTransactionToDB(req)
+
+	err := db.DB.QueryRow("INSERT INTO transactionns (amount, description, method, created_by, status, type, recorded_date) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id", transaction.Amount, transaction.Description, transaction.Method, transaction.CreatedBy, transaction.Status, transaction.Type, transaction.RecordedDate).Scan(&transaction.ID)
 	if err != nil {
 		shared.WriteError(w, http.StatusInternalServerError, "Database insert error")
 		return
 	}
+
+	res = ConvertTransactionFromDB(transaction)
 
 	shared.WriteJSON(w, http.StatusCreated, res)
 }

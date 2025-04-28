@@ -8,9 +8,10 @@ import (
 )
 
 type Config struct {
-	Port        string
-	DBURL       string
-	Environment string
+	Port          string
+	DBURL         string
+	Environment   string
+	AuthSecretKey string
 }
 
 func LoadConfig() *Config {
@@ -20,9 +21,10 @@ func LoadConfig() *Config {
 	}
 
 	cfg := &Config{
-		DBURL:       os.Getenv("DATABASE_URL"),
-		Port:        os.Getenv("PORT"),
-		Environment: os.Getenv("ENVIRONMENT"),
+		DBURL:         os.Getenv("DATABASE_URL"),
+		Port:          os.Getenv("PORT"),
+		Environment:   os.Getenv("ENVIRONMENT"),
+		AuthSecretKey: os.Getenv("AUTH_SECRET_KEY"),
 	}
 
 	if cfg.DBURL == "" {

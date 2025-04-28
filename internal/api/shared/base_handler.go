@@ -1,6 +1,9 @@
 package shared
 
-import "net/http"
+import (
+	"context"
+	"net/http"
+)
 
 type EntityHandler interface {
 	Get(http.ResponseWriter, *http.Request)
@@ -9,11 +12,20 @@ type EntityHandler interface {
 	Patch(http.ResponseWriter, *http.Request)
 }
 
-func HandleEntity(h EntityHandler) http.HandlerFunc {
+func HandleEntity(h EntityHandler, authenticator *SimpleAuthenticator) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "*")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+		userID, orgID, err := CheckOrg(r, authenticator)
+		if err != nil {
+			WriteError(w, http.StatusUnauthorized, err.Error())
+		}
+
+		ctx := context.WithValue(r.Context(), UserIDContextKey, userID)
+		ctx = context.WithValue(ctx, OrgIDContextKey, orgID)
+		r = r.WithContext(ctx)
 
 		switch r.Method {
 		case http.MethodGet:

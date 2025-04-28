@@ -17,11 +17,15 @@ func handleCreateAsset(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := db.DB.QueryRow("INSERT INTO assets (title, cost, description, created_by, status, type, purchase_date) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id", req.Title, req.Cost, req.Description, req.CreatedBy, req.Status, req.Type, req.PurchaseDate).Scan(&res.ID)
+	transaction := ConvertAssetToDB(req)
+
+	err := db.DB.QueryRow("INSERT INTO assets (title, cost, description, created_by, status, type, purchase_date) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id", transaction.Title, transaction.Cost, transaction.Description, transaction.CreatedBy, transaction.Status, transaction.Type, transaction.PurchaseDate).Scan(&transaction.ID)
 	if err != nil {
 		shared.WriteError(w, http.StatusInternalServerError, "Database insert error")
 		return
 	}
+
+	res = ConvertAssetFromDB(transaction)
 
 	shared.WriteJSON(w, http.StatusCreated, res)
 }

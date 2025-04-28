@@ -2,6 +2,8 @@ package main
 
 import (
 	"f_admin_go/internal/api/assets"
+	"f_admin_go/internal/api/auth"
+	"f_admin_go/internal/api/organizations"
 	"f_admin_go/internal/api/shared"
 	"f_admin_go/internal/api/transactions"
 	"f_admin_go/internal/config"
@@ -12,14 +14,16 @@ import (
 )
 
 func main() {
+	cfg := config.LoadConfig()
+
+	authenticator := shared.NewSimpleAuthenticator(cfg.AuthSecretKey)
+
 	server := &http.Server{
-		Addr:         ":8080",
-		Handler:      routes(),
+		Addr:         cfg.Port,
+		Handler:      routes(authenticator),
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 30 * time.Second,
 	}
-
-	cfg := config.LoadConfig()
 
 	log.Printf("Server running on port %s", cfg.Port)
 	log.Printf("Environment: %s", cfg.Environment)
@@ -42,12 +46,22 @@ func main() {
 	log.Fatal(server.ListenAndServe())
 }
 
-func routes() *http.ServeMux {
+func routes(authenticator *shared.SimpleAuthenticator) *http.ServeMux {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/api/assets", shared.HandleEntity(&assets.Handler{}))
-	mux.HandleFunc("/api/transactions", shared.HandleEntity(&transactions.Handler{}))
-	// mux.HandleFunc("/api/product", api.HandleProductRequest)
+	mux.HandleFunc("/api/login", func(w http.ResponseWriter, r *http.Request) {
+		auth.Login(w, r, authenticator)
+	})
+	mux.HandleFunc("/api/register", func(w http.ResponseWriter, r *http.Request) {
+		auth.Register(w, r, authenticator)
+	})
+	mux.HandleFunc("/api/neworg", func(w http.ResponseWriter, r *http.Request) {
+		organizations.HandleCreateOrganization(w, r)
+	})
+
+	mux.HandleFunc("/api/assets", shared.HandleEntity(&assets.Handler{}, authenticator))
+	mux.HandleFunc("/api/transactions", shared.HandleEntity(&transactions.Handler{}, authenticator))
 	mux.HandleFunc("/", handleNotFound)
+
 	return mux
 }
 
@@ -56,5 +70,5 @@ func handleNotFound(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
-	w.Write([]byte("Welcome to fantasy Tech"))
+	w.Write([]byte("Welcome to fantasy tech"))
 }

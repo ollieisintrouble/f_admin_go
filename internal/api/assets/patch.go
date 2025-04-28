@@ -15,7 +15,9 @@ func handlePatchAsset(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := db.DB.Exec("UPDATE assets SET title = $1, cost = $2, description = $3, status = $4, type = $5, purchase_date = $6 WHERE id = $7", req.Title, req.Cost, req.Description, req.Status, req.Type, req.PurchaseDate, req.ID)
+	transaction := ConvertAssetToDB(req)
+
+	_, err := db.DB.Exec("UPDATE assets SET title = $1, cost = $2, description = $3, status = $4, type = $5, purchase_date = $6 WHERE id = $7", transaction.Title, transaction.Cost, transaction.Description, transaction.Status, transaction.Type, transaction.PurchaseDate, transaction.ID)
 	if err != nil {
 		shared.WriteError(w, http.StatusInternalServerError, "Database update error")
 		return

@@ -6,7 +6,7 @@ import (
 	"f_admin_go/internal/models"
 )
 
-func ConvertTransaction(t db.Transaction) models.TransactionDTO {
+func ConvertTransactionFromDB(t db.Transaction) models.TransactionDTO {
 	return models.TransactionDTO{
 		ID:           t.ID,
 		Amount:       t.Amount,
@@ -21,11 +21,17 @@ func ConvertTransaction(t db.Transaction) models.TransactionDTO {
 	}
 }
 
-// COMMENT OUT BECAUSE UNUSED
-// func ConvertTransactionList(list []db.Transactions) []models.TransactionResponse {
-// 	out := make([]models.TransactionResponse, len(list))
-// 	for i, t := range list {
-// 		out[i] = ConvertTransaction(t)
-// 	}
-// 	return out
-// }
+func ConvertTransactionToDB(t models.TransactionDTO) db.Transaction {
+	return db.Transaction{
+		ID:           t.ID,
+		Amount:       t.Amount,
+		Description:  shared.StringToNullString(*t.Description),
+		Method:       shared.StringToNullString(*t.Method),
+		CreatedBy:    shared.StringToNullString(*t.CreatedBy),
+		CreatedAt:    t.CreatedAt,
+		UpdatedAt:    t.UpdatedAt,
+		Status:       shared.StringToNullString(*t.Status),
+		Type:         shared.StringToNullString(*t.Type),
+		RecordedDate: shared.TimeToNullTime(t.RecordedDate),
+	}
+}

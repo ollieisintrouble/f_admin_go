@@ -15,7 +15,9 @@ func handlePatchTransaction(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := db.DB.Exec("UPDATE transactions SET amount = $1, description = $2, method = $3, status = $4, type = $5, recorded_date = $6 WHERE id = $7", req.Amount, req.Description, req.Method, req.Status, req.Type, req.RecordedDate, req.ID)
+	transaction := ConvertTransactionToDB(req)
+
+	_, err := db.DB.Exec("UPDATE transactions SET amount = $1, description = $2, method = $3, status = $4, type = $5, recorded_date = $6 WHERE id = $7", transaction.Amount, transaction.Description, transaction.Method, transaction.Status, transaction.Type, transaction.RecordedDate, transaction.ID)
 	if err != nil {
 		shared.WriteError(w, http.StatusInternalServerError, "Database update error")
 		return
