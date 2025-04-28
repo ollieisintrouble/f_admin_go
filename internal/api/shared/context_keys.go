@@ -3,6 +3,6 @@ package shared
 type contextKey string
 
 const (
-	UserIDContextKey contextKey = "userID"
-	OrgIDContextKey  contextKey = "orgID"
+	UserIDContextKey contextKey = "userId"
+	OrgIDContextKey  contextKey = "orgId"
 )
