@@ -37,11 +37,16 @@ type Product struct {
 	ID           int64          `json:"id" db:"id"`
 	ProductName  string         `json:"productName" db:"product_name"`
 	Description  sql.NullString `json:"description" db:"description"`
-	ProductUrl   sql.NullString `json:"productUrl" db:"product_url"`
+	ProductURL   sql.NullString `json:"productUrl" db:"product_url"`
 	CreatedBy    sql.NullString `json:"createdBy" db:"created_by"`
 	CreatedAt    time.Time      `json:"createdAt" db:"created_at"`
 	UpdatedAt    time.Time      `json:"updatedAt" db:"updated_at"`
 	Organization int64          `json:"organization" db:"organization"`
+	Status       sql.NullString `json:"status" db:"status"`
+	Type         sql.NullString `json:"type" db:"type"`
+	LaunchDate   sql.NullTime   `json:"purchaseDate" db:"launch_date"`
+	MetricsURL   sql.NullString `json:"metricsUrl" db:"metrics_url"`
+	Logo         sql.NullString `json:"logo" db:"logo"`
 }
 
 type User struct {

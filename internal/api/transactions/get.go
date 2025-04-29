@@ -8,7 +8,18 @@ import (
 )
 
 func handleGetTransaction(w http.ResponseWriter, r *http.Request) {
-	rows, err := db.DB.Query("SELECT * FROM transactions")
+	orgIDStr, ok := shared.GetOrgID(r.Context())
+	if !ok {
+		shared.WriteError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+	orgID, err := shared.ConvertOrgIDToInt(orgIDStr)
+	if err != nil {
+		shared.WriteError(w, http.StatusUnauthorized, "Invalid org ID")
+		return
+	}
+
+	rows, err := db.DB.Query("SELECT id, amount, description, method, created_by, created_at, updated_at, status, type, recorded_date FROM transactions WHERE organization = $1", orgID)
 	if err != nil {
 		shared.WriteError(w, http.StatusInternalServerError, "Database query error")
 		return

@@ -31,24 +31,30 @@ type TransactionDTO struct {
 }
 
 type ProductDTO struct {
-	ID          int64     `json:"id"`
-	ProductName string    `json:"productName"`
-	Description *string   `json:"description"`
-	ProductUrl  *string   `json:"productUrl"`
-	CreatedBy   *string   `json:"createdBy"`
-	CreatedAt   time.Time `json:"createdAt"`
-	UpdatedAt   time.Time `json:"updatedAt"`
+	ID           int64      `json:"id"`
+	ProductName  string     `json:"productName"`
+	Description  *string    `json:"description"`
+	ProductURL   *string    `json:"productUrl"`
+	CreatedBy    *string    `json:"createdBy"`
+	CreatedAt    time.Time  `json:"createdAt"`
+	UpdatedAt    time.Time  `json:"updatedAt"`
+	Organization int64      `json:"organization"`
+	Status       *string    `json:"status"`
+	Type         *string    `json:"type"`
+	LaunchDate   *time.Time `json:"purchaseDate"`
+	MetricsURL   *string    `json:"metricsUrl"`
+	Logo         *string    `json:"logo"`
 }
 
 type UserDTO struct {
-	ID        string     `json:"id" db:"id"`
-	Username  string     `json:"username" db:"username"`
-	Password  string     `json:"password" db:"password"`
-	FullName  *string    `json:"fullName" db:"full_name"`
-	Email     *string    `json:"email" db:"email"`
-	Phone     *string    `json:"phone" db:"phone"`
-	Image     *string    `json:"image" db:"image"`
-	CreatedAt *time.Time `json:"createdAt" db:"created_at"`
+	ID        string    `json:"id"`
+	Username  string    `json:"username"`
+	FullName  *string   `json:"fullName"`
+	Email     *string   `json:"email"`
+	Phone     *string   `json:"phone"`
+	Image     *string   `json:"image"`
+	CreatedAt time.Time `json:"createdAt"`
+	Role      string    `json:"role"`
 }
 
 type Credentials struct {
@@ -62,6 +68,8 @@ type RegisterForm struct {
 	FullName *string `json:"fullName"`
 	Email    *string `json:"email"`
 	Phone    *string `json:"phone"`
+	Image    *string `json:"image"`
+	Role     string  `json:"role"`
 }
 
 type OrganizationDTO struct {

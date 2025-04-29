@@ -1,26 +1,21 @@
 package membership
 
 import (
-	"encoding/json"
 	"f_admin_go/internal/api/shared"
 	"f_admin_go/internal/db"
 	"net/http"
 )
 
-type UserIDRequestBody struct {
-	UserID string `json:"userId"`
-}
-
 func handleGetMembership(w http.ResponseWriter, r *http.Request) {
-	var req UserIDRequestBody
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		shared.WriteError(w, http.StatusBadRequest, "Invalid request")
+	userID, ok := shared.GetUserID(r.Context())
+	if !ok {
+		shared.WriteError(w, http.StatusUnauthorized, "Unauthorized")
 		return
 	}
 
 	var res []db.Membership
 
-	rows, err := db.DB.Query("SELECT * FROM memberships WHERE user_id = $1", req.UserID)
+	rows, err := db.DB.Query("SELECT * FROM memberships WHERE user_id = $1", userID)
 	if err != nil {
 		shared.WriteError(w, http.StatusInternalServerError, "Database query error")
 		return

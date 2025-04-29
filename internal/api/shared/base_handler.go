@@ -21,6 +21,7 @@ func HandleEntity(h EntityHandler, authenticator *SimpleAuthenticator) http.Hand
 		userID, orgID, err := CheckOrg(r, authenticator)
 		if err != nil {
 			WriteError(w, http.StatusUnauthorized, err.Error())
+			return
 		}
 
 		ctx := context.WithValue(r.Context(), UserIDContextKey, userID)

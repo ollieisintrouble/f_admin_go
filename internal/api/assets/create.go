@@ -9,23 +9,37 @@ import (
 )
 
 func handleCreateAsset(w http.ResponseWriter, r *http.Request) {
+	orgIDStr, ok := shared.GetOrgID(r.Context())
+	if !ok {
+		shared.WriteError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+	orgID, err := shared.ConvertOrgIDToInt(orgIDStr)
+	if err != nil {
+		shared.WriteError(w, http.StatusUnauthorized, "Invalid org ID")
+		return
+	}
+
 	var req models.AssetDTO
-	var res models.AssetDTO
 
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		shared.WriteError(w, http.StatusBadRequest, "Invalid request")
 		return
 	}
 
-	transaction := ConvertAssetToDB(req)
+	asset := ConvertAssetToDB(req)
 
-	err := db.DB.QueryRow("INSERT INTO assets (title, cost, description, created_by, status, type, purchase_date) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id", transaction.Title, transaction.Cost, transaction.Description, transaction.CreatedBy, transaction.Status, transaction.Type, transaction.PurchaseDate).Scan(&transaction.ID)
+	_, err = db.DB.Exec("INSERT INTO assets (title, cost, description, created_by, status, type, purchase_date, organization) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", asset.Title, asset.Cost, asset.Description, asset.CreatedBy, asset.Status, asset.Type, asset.PurchaseDate, orgID)
 	if err != nil {
 		shared.WriteError(w, http.StatusInternalServerError, "Database insert error")
 		return
 	}
 
-	res = ConvertAssetFromDB(transaction)
+	// description := fmt.Sprintf("Procurement of %s", asset.Title)
+	// _, err = db.DB.Exec("INSERT INTO transactionns (amount, description, created_by, status, type, recorded_date, organization) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", asset.Cost, description, asset.CreatedBy, "Paid", "Asset", asset.PurchaseDate, orgID)
+	// if err != nil {
+	// 	shared.WriteError(w, http.StatusCreated, "Extra insertion of transaction failed")
+	// }
 
-	shared.WriteJSON(w, http.StatusCreated, res)
+	w.WriteHeader(http.StatusCreated)
 }

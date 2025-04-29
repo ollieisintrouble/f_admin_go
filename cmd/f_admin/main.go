@@ -3,9 +3,11 @@ package main
 import (
 	"f_admin_go/internal/api/assets"
 	"f_admin_go/internal/api/auth"
-	"f_admin_go/internal/api/organizations"
+	"f_admin_go/internal/api/membership"
+	"f_admin_go/internal/api/products"
 	"f_admin_go/internal/api/shared"
 	"f_admin_go/internal/api/transactions"
+	"f_admin_go/internal/api/users"
 	"f_admin_go/internal/config"
 	"f_admin_go/internal/db"
 	"log"
@@ -54,12 +56,12 @@ func routes(authenticator *shared.SimpleAuthenticator) *http.ServeMux {
 	mux.HandleFunc("/api/register", func(w http.ResponseWriter, r *http.Request) {
 		auth.Register(w, r, authenticator)
 	})
-	mux.HandleFunc("/api/neworg", func(w http.ResponseWriter, r *http.Request) {
-		organizations.HandleCreateOrganization(w, r)
-	})
 
 	mux.HandleFunc("/api/assets", shared.HandleEntity(&assets.Handler{}, authenticator))
 	mux.HandleFunc("/api/transactions", shared.HandleEntity(&transactions.Handler{}, authenticator))
+	mux.HandleFunc("/api/products", shared.HandleEntity(&products.Handler{}, authenticator))
+	mux.HandleFunc("/api/users", shared.HandleEntity(&users.Handler{}, authenticator))
+	mux.HandleFunc("/api/membership", shared.HandleEntity(&membership.Handler{}, authenticator))
 	mux.HandleFunc("/", handleNotFound)
 
 	return mux

@@ -1,4 +1,4 @@
-package membership
+package products
 
 import (
 	"net/http"
@@ -7,17 +7,17 @@ import (
 type Handler struct{}
 
 func (h *Handler) Get(w http.ResponseWriter, r *http.Request) {
-	handleGetMembership(w, r)
+	handleGetProduct(w, r)
 }
 
 func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
-	handleCreateMembership(w, r)
+	handleCreateProduct(w, r)
 }
 
 func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
-	handleDeleteMembership(w, r)
+	handleDeleteProduct(w, r)
 }
 
 func (h *Handler) Patch(w http.ResponseWriter, r *http.Request) {
-	handlePatchMembership(w, r)
+	handlePatchProduct(w, r)
 }

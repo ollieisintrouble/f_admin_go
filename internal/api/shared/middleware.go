@@ -20,9 +20,13 @@ func CheckOrg(r *http.Request, authenticator *SimpleAuthenticator) (string, stri
 		return "", "", errors.New("unauthorized")
 	}
 
-	orgID := r.URL.Query().Get("org_id")
-	if orgID == "" {
+	orgIDStr := r.URL.Query().Get("org_id")
+	if orgIDStr == "" {
 		return "", "", errors.New("no access allowed")
+	}
+	orgID, err := ConvertOrgIDToInt(orgIDStr)
+	if err != nil {
+		return "", "", errors.New("invalid org ID")
 	}
 
 	var membership db.Membership
@@ -34,5 +38,5 @@ func CheckOrg(r *http.Request, authenticator *SimpleAuthenticator) (string, stri
 		return "", "", errors.New("no access allowed")
 	}
 
-	return userID, orgID, nil
+	return userID, orgIDStr, nil
 }

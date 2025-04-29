@@ -45,10 +45,6 @@ func GetOrgID(ctx context.Context) (string, bool) {
 	return orgID, ok
 }
 
-func ConvertOrgIDToInt(o string) int64 {
-	orgID, err := strconv.ParseInt(o, 10, 64)
-	if err != nil {
-		panic(err)
-	}
-	return orgID
+func ConvertOrgIDToInt(o string) (int64, error) {
+	return strconv.ParseInt(o, 10, 64)
 }

@@ -25,9 +25,10 @@ func Register(w http.ResponseWriter, r *http.Request, authenticator *shared.Simp
 		return
 	}
 
-	user, err := users.CreateUser(w, req)
+	user, err := users.UserRegister(w, req)
 	if err != nil {
 		shared.WriteError(w, http.StatusInternalServerError, "Unable to create account")
+		return
 	}
 
 	token, err := authenticator.GenerateToken(user.ID)

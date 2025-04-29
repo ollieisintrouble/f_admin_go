@@ -8,10 +8,18 @@ import (
 )
 
 func handleGetAsset(w http.ResponseWriter, r *http.Request) {
-	orgIDStr := r.Context().Value(shared.OrgIDContextKey).(string)
-	orgID := shared.ConvertOrgIDToInt(orgIDStr)
+	orgIDStr, ok := shared.GetOrgID(r.Context())
+	if !ok {
+		shared.WriteError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+	orgID, err := shared.ConvertOrgIDToInt(orgIDStr)
+	if err != nil {
+		shared.WriteError(w, http.StatusUnauthorized, "Invalid org ID")
+		return
+	}
 
-	rows, err := db.DB.Query("SELECT * FROM assets WHERE organization = $1", orgID)
+	rows, err := db.DB.Query("SELECT id, title, cost, description, created_by, created_at, updated_at, status, type, purchase_date FROM assets WHERE organization = $1", orgID)
 	if err != nil {
 		shared.WriteError(w, http.StatusInternalServerError, "Database query error")
 		return
