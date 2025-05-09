@@ -19,20 +19,20 @@ func ConvertUserToDB(r models.RegisterForm) (db.User, error) {
 	return db.User{
 		Username:     r.Username,
 		PasswordHash: string(hash),
-		FullName:     shared.StringToNullString(*r.FullName),
-		Email:        shared.StringToNullString(*r.Email),
-		Phone:        shared.StringToNullString(*r.Phone),
-		Image:        shared.StringToNullString(*r.Image),
+		FullName:     shared.StringToNullString(r.FullName),
+		Email:        shared.StringToNullString(r.Email),
+		Phone:        shared.StringToNullString(r.Phone),
+		Image:        shared.StringToNullString(r.Image),
 	}, nil
 }
 
 func UpdateUserDB(u models.UserDTO) db.User {
 	return db.User{
 		Username: u.Username,
-		FullName: shared.StringToNullString(*u.FullName),
-		Email:    shared.StringToNullString(*u.Email),
-		Phone:    shared.StringToNullString(*u.Phone),
-		Image:    shared.StringToNullString(*u.Image),
+		FullName: shared.StringToNullString(u.FullName),
+		Email:    shared.StringToNullString(u.Email),
+		Phone:    shared.StringToNullString(u.Phone),
+		Image:    shared.StringToNullString(u.Image),
 	}
 }
 

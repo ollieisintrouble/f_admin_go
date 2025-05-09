@@ -28,7 +28,8 @@ func (a *SimpleAuthenticator) GenerateToken(userID string) (string, error) {
 	sig.Write(jsonBytes)
 	signature := sig.Sum(nil)
 
-	token := base64.StdEncoding.EncodeToString(jsonBytes) + "." + base64.StdEncoding.EncodeToString(signature)
+	token := base64.URLEncoding.EncodeToString(jsonBytes) + "." + base64.URLEncoding.EncodeToString(signature)
+	fmt.Println("Generated token:", token)
 	return token, nil
 }
 
@@ -39,6 +40,7 @@ func NewSimpleAuthenticator(secretKey string) *SimpleAuthenticator {
 }
 
 func (a *SimpleAuthenticator) DecodeToken(token string) (string, error) {
+	fmt.Println("Decoding token:", token)
 	parts := strings.Split(token, ".")
 	if len(parts) != 2 {
 		return "", fmt.Errorf("invalid token format")
@@ -46,7 +48,7 @@ func (a *SimpleAuthenticator) DecodeToken(token string) (string, error) {
 
 	encodedClaims, encodedSig := parts[0], parts[1]
 
-	claimsBytes, err := base64.StdEncoding.DecodeString(encodedClaims)
+	claimsBytes, err := base64.URLEncoding.DecodeString(encodedClaims)
 	if err != nil {
 		return "", fmt.Errorf("failed to decode claims: %v", err)
 	}
@@ -55,7 +57,7 @@ func (a *SimpleAuthenticator) DecodeToken(token string) (string, error) {
 	sig.Write(claimsBytes)
 	expectedSig := sig.Sum(nil)
 
-	providedSig, err := base64.StdEncoding.DecodeString(encodedSig)
+	providedSig, err := base64.URLEncoding.DecodeString(encodedSig)
 	if err != nil {
 		return "", fmt.Errorf("failed to decode signature: %v", err)
 	}

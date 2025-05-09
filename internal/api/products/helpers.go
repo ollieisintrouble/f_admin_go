@@ -27,15 +27,15 @@ func ConvertProductToDB(p models.ProductDTO) db.Product {
 	return db.Product{
 		ID:          p.ID,
 		ProductName: p.ProductName,
-		Description: shared.StringToNullString(*p.Description),
-		ProductURL:  shared.StringToNullString(*p.ProductURL),
-		CreatedBy:   shared.StringToNullString(*p.CreatedBy),
+		Description: shared.StringToNullString(p.Description),
+		ProductURL:  shared.StringToNullString(p.ProductURL),
+		CreatedBy:   shared.StringToNullString(p.CreatedBy),
 		CreatedAt:   p.CreatedAt,
 		UpdatedAt:   p.UpdatedAt,
-		Status:      shared.StringToNullString(*p.Status),
-		Type:        shared.StringToNullString(*p.Type),
+		Status:      shared.StringToNullString(p.Status),
+		Type:        shared.StringToNullString(p.Type),
 		LaunchDate:  shared.TimeToNullTime(p.LaunchDate),
-		MetricsURL:  shared.StringToNullString(*p.MetricsURL),
-		Logo:        shared.StringToNullString(*p.Logo),
+		MetricsURL:  shared.StringToNullString(p.MetricsURL),
+		Logo:        shared.StringToNullString(p.Logo),
 	}
 }

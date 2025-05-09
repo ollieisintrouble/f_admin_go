@@ -25,13 +25,25 @@ func ConvertTransactionToDB(t models.TransactionDTO) db.Transaction {
 	return db.Transaction{
 		ID:           t.ID,
 		Amount:       t.Amount,
-		Description:  shared.StringToNullString(*t.Description),
-		Method:       shared.StringToNullString(*t.Method),
-		CreatedBy:    shared.StringToNullString(*t.CreatedBy),
+		Description:  shared.StringToNullString(t.Description),
+		Method:       shared.StringToNullString(t.Method),
+		CreatedBy:    shared.StringToNullString(t.CreatedBy),
 		CreatedAt:    t.CreatedAt,
 		UpdatedAt:    t.UpdatedAt,
-		Status:       shared.StringToNullString(*t.Status),
-		Type:         shared.StringToNullString(*t.Type),
+		Status:       shared.StringToNullString(t.Status),
+		Type:         shared.StringToNullString(t.Type),
+		RecordedDate: shared.TimeToNullTime(t.RecordedDate),
+	}
+}
+
+func ConvertTransactionToCreate(t models.TransactionForm) db.Transaction {
+	return db.Transaction{
+		Amount:       t.Amount,
+		Description:  shared.StringToNullString(t.Description),
+		Method:       shared.StringToNullString(t.Method),
+		CreatedBy:    shared.StringToNullString(t.CreatedBy),
+		Status:       shared.StringToNullString(t.Status),
+		Type:         shared.StringToNullString(t.Type),
 		RecordedDate: shared.TimeToNullTime(t.RecordedDate),
 	}
 }

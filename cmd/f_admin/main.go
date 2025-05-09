@@ -56,6 +56,9 @@ func routes(authenticator *shared.SimpleAuthenticator) *http.ServeMux {
 	mux.HandleFunc("/api/register", func(w http.ResponseWriter, r *http.Request) {
 		auth.Register(w, r, authenticator)
 	})
+	mux.HandleFunc("/api/valtok", func(w http.ResponseWriter, r *http.Request) {
+		auth.ValidateToken(w, r, authenticator)
+	})
 
 	mux.HandleFunc("/api/assets", shared.HandleEntity(&assets.Handler{}, authenticator))
 	mux.HandleFunc("/api/transactions", shared.HandleEntity(&transactions.Handler{}, authenticator))

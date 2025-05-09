@@ -26,12 +26,12 @@ func ConvertAssetToDB(t models.AssetDTO) db.Asset {
 		ID:           t.ID,
 		Title:        t.Title,
 		Cost:         t.Cost,
-		Description:  shared.StringToNullString(*t.Description),
-		CreatedBy:    shared.StringToNullString(*t.CreatedBy),
+		Description:  shared.StringToNullString(t.Description),
+		CreatedBy:    shared.StringToNullString(t.CreatedBy),
 		CreatedAt:    t.CreatedAt,
 		UpdatedAt:    t.UpdatedAt,
-		Status:       shared.StringToNullString(*t.Status),
-		Type:         shared.StringToNullString(*t.Type),
+		Status:       shared.StringToNullString(t.Status),
+		Type:         shared.StringToNullString(t.Type),
 		PurchaseDate: shared.TimeToNullTime(t.PurchaseDate),
 	}
 }

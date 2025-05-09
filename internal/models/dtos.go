@@ -1,6 +1,7 @@
 package models
 
 import (
+	"f_admin_go/internal/db"
 	"time"
 )
 
@@ -25,6 +26,16 @@ type TransactionDTO struct {
 	CreatedBy    *string    `json:"createdBy"`
 	CreatedAt    time.Time  `json:"createdAt"`
 	UpdatedAt    time.Time  `json:"updatedAt"`
+	Status       *string    `json:"status"`
+	Type         *string    `json:"type"`
+	RecordedDate *time.Time `json:"recordedDate"`
+}
+
+type TransactionForm struct {
+	Amount       int64      `json:"amount"`
+	Description  *string    `json:"description"`
+	Method       *string    `json:"method"`
+	CreatedBy    *string    `json:"createdBy"`
 	Status       *string    `json:"status"`
 	Type         *string    `json:"type"`
 	RecordedDate *time.Time `json:"recordedDate"`
@@ -83,4 +94,10 @@ type OrganizationDTO struct {
 type CreateOrginzationForm struct {
 	UserID       string          `json:"userId"`
 	Organization OrganizationDTO `json:"organization"`
+}
+
+type TokenValidationResponse struct {
+	User          UserDTO           `json:"user"`
+	Organizations []OrganizationDTO `json:"orgs"`
+	Memberships   []db.Membership   `json:"memberships"`
 }

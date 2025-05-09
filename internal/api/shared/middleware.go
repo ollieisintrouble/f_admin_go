@@ -4,20 +4,19 @@ import (
 	"database/sql"
 	"errors"
 	"net/http"
-	"strings"
 
 	"f_admin_go/internal/db"
 )
 
 func CheckOrg(r *http.Request, authenticator *SimpleAuthenticator) (string, string, error) {
-	authHeader := r.Header.Get("Authorization")
-	if authHeader == "" {
-		return "", "", errors.New("unauthorized")
+	cookie, err := r.Cookie("authToken")
+	if err != nil {
+		return "", "", errors.New("no auth token found")
 	}
-	token := strings.TrimPrefix(authHeader, "Bearer ")
+	token := cookie.Value
 	userID, err := authenticator.DecodeToken(token)
 	if err != nil {
-		return "", "", errors.New("unauthorized")
+		return "", "", errors.New(err.Error())
 	}
 
 	orgIDStr := r.URL.Query().Get("org_id")

@@ -21,11 +21,11 @@ func NullTimePtr(nt sql.NullTime) *time.Time {
 	return nil
 }
 
-func StringToNullString(s string) sql.NullString {
-	if s == "" {
+func StringToNullString(s *string) sql.NullString {
+	if s == nil {
 		return sql.NullString{Valid: false}
 	}
-	return sql.NullString{String: s, Valid: true}
+	return sql.NullString{String: *s, Valid: true}
 }
 
 func TimeToNullTime(t *time.Time) sql.NullTime {

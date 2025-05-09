@@ -16,7 +16,13 @@ func HandleEntity(h EntityHandler, authenticator *SimpleAuthenticator) http.Hand
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "*")
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
 
 		userID, orgID, err := CheckOrg(r, authenticator)
 		if err != nil {
@@ -37,8 +43,6 @@ func HandleEntity(h EntityHandler, authenticator *SimpleAuthenticator) http.Hand
 			h.Delete(w, r)
 		case http.MethodPatch:
 			h.Patch(w, r)
-		case http.MethodOptions:
-			w.WriteHeader(http.StatusOK)
 		default:
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
