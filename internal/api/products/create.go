@@ -28,12 +28,13 @@ func handleCreateProduct(w http.ResponseWriter, r *http.Request) {
 	}
 
 	product := ConvertProductToDB(req)
+	var res int64
 
-	_, err = db.DB.Exec("INSERT INTO products (product_name, description, product_url, created_by, created_at, updated_at, organization, status, type, launch_date, metrics_url, logo) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)", &product.ProductName, &product.Description, &product.ProductURL, &product.CreatedBy, &product.CreatedAt, &product.UpdatedAt, orgID, &product.Status, &product.Type, &product.LaunchDate, &product.MetricsURL, &product.Logo)
+	err = db.DB.QueryRow("INSERT INTO products (product_name, description, product_url, created_by, created_at, updated_at, organization, status, type, launch_date, metrics_url, logo) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id", &product.ProductName, &product.Description, &product.ProductURL, &product.CreatedBy, &product.CreatedAt, &product.UpdatedAt, orgID, &product.Status, &product.Type, &product.LaunchDate, &product.MetricsURL, &product.Logo).Scan(&res)
 	if err != nil {
 		shared.WriteError(w, http.StatusInternalServerError, "Database insert error")
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
+	shared.WriteJSON(w, http.StatusCreated, res)
 }

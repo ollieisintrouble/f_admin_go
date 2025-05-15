@@ -15,7 +15,7 @@ func handleGetMembership(w http.ResponseWriter, r *http.Request) {
 
 	var res []db.Membership
 
-	rows, err := db.DB.Query("SELECT * FROM memberships WHERE user_id = $1", userID)
+	rows, err := db.DB.Query("SELECT * FROM membership WHERE user_id = $1", userID)
 	if err != nil {
 		shared.WriteError(w, http.StatusInternalServerError, "Database query error")
 		return

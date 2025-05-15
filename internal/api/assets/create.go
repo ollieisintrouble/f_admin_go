@@ -28,8 +28,9 @@ func handleCreateAsset(w http.ResponseWriter, r *http.Request) {
 	}
 
 	asset := ConvertAssetToDB(req)
+	var res int64
 
-	_, err = db.DB.Exec("INSERT INTO assets (title, cost, description, created_by, status, type, purchase_date, organization) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", asset.Title, asset.Cost, asset.Description, asset.CreatedBy, asset.Status, asset.Type, asset.PurchaseDate, orgID)
+	err = db.DB.QueryRow("INSERT INTO assets (title, cost, description, created_by, status, type, purchase_date, organization) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id", asset.Title, asset.Cost, asset.Description, asset.CreatedBy, asset.Status, asset.Type, asset.PurchaseDate, orgID).Scan(&res)
 	if err != nil {
 		shared.WriteError(w, http.StatusInternalServerError, "Database insert error")
 		return
@@ -41,5 +42,5 @@ func handleCreateAsset(w http.ResponseWriter, r *http.Request) {
 	// 	shared.WriteError(w, http.StatusCreated, "Extra insertion of transaction failed")
 	// }
 
-	w.WriteHeader(http.StatusCreated)
+	shared.WriteJSON(w, http.StatusCreated, res)
 }

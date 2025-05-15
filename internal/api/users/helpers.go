@@ -36,7 +36,7 @@ func UpdateUserDB(u models.UserDTO) db.User {
 	}
 }
 
-func ConvertUserFromDB(u db.User) models.UserDTO {
+func ConvertUserFromDB(u db.User, role string) models.UserDTO {
 	return models.UserDTO{
 		Username:  u.Username,
 		FullName:  shared.NullStringPtr(u.FullName),
@@ -44,5 +44,6 @@ func ConvertUserFromDB(u db.User) models.UserDTO {
 		Phone:     shared.NullStringPtr(u.Phone),
 		Image:     shared.NullStringPtr(u.Image),
 		CreatedAt: u.CreatedAt,
+		Role:      role,
 	}
 }

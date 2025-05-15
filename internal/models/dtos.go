@@ -52,7 +52,7 @@ type ProductDTO struct {
 	Organization int64      `json:"organization"`
 	Status       *string    `json:"status"`
 	Type         *string    `json:"type"`
-	LaunchDate   *time.Time `json:"purchaseDate"`
+	LaunchDate   *time.Time `json:"launchDate"`
 	MetricsURL   *string    `json:"metricsUrl"`
 	Logo         *string    `json:"logo"`
 }

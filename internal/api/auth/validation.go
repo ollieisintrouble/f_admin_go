@@ -41,7 +41,7 @@ func ValidateToken(w http.ResponseWriter, r *http.Request, authenticator *shared
 		shared.WriteError(w, http.StatusBadRequest, "Invalid token")
 		return
 	}
-	res.User = users.ConvertUserFromDB(user)
+	res.User = users.ConvertUserFromDB(user, "")
 
 	rows, err := db.DB.Query("SELECT * FROM membership WHERE user_id = $1", userID)
 	if err != nil {
