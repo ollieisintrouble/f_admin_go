@@ -29,7 +29,6 @@ func (a *SimpleAuthenticator) GenerateToken(userID string) (string, error) {
 	signature := sig.Sum(nil)
 
 	token := base64.URLEncoding.EncodeToString(jsonBytes) + "." + base64.URLEncoding.EncodeToString(signature)
-	fmt.Println("Generated token:", token)
 	return token, nil
 }
 
@@ -40,7 +39,6 @@ func NewSimpleAuthenticator(secretKey string) *SimpleAuthenticator {
 }
 
 func (a *SimpleAuthenticator) DecodeToken(token string) (string, error) {
-	fmt.Println("Decoding token:", token)
 	parts := strings.Split(token, ".")
 	if len(parts) != 2 {
 		return "", fmt.Errorf("invalid token format")
