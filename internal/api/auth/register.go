@@ -42,7 +42,7 @@ func Register(w http.ResponseWriter, r *http.Request, authenticator *shared.Simp
 		Name:     "authToken",
 		Value:    token,
 		HttpOnly: true,
-		Secure:   false,
+		Secure:   true,
 		Path:     "/",
 	})
 

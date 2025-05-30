@@ -3,6 +3,7 @@ package main
 import (
 	"f_admin_go/internal/api/assets"
 	"f_admin_go/internal/api/auth"
+	"f_admin_go/internal/api/feedbacks"
 	"f_admin_go/internal/api/membership"
 	"f_admin_go/internal/api/products"
 	"f_admin_go/internal/api/shared"
@@ -58,6 +59,10 @@ func routes(authenticator *shared.SimpleAuthenticator) *http.ServeMux {
 	})
 	mux.HandleFunc("/api/valtok", func(w http.ResponseWriter, r *http.Request) {
 		auth.ValidateToken(w, r, authenticator)
+	})
+	// open route for feedbacks
+	mux.HandleFunc("/api/feedbacks", func(w http.ResponseWriter, r *http.Request) {
+		feedbacks.Handler(w, r)
 	})
 
 	mux.HandleFunc("/api/assets", shared.HandleEntity(&assets.Handler{}, authenticator))

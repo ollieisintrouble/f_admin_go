@@ -47,7 +47,7 @@ func Login(w http.ResponseWriter, r *http.Request, authenticator *shared.SimpleA
 		Name:     "authToken",
 		Value:    token,
 		HttpOnly: true,
-		Secure:   false,
+		Secure:   true,
 		Path:     "/",
 	})
 

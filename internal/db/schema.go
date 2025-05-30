@@ -73,3 +73,11 @@ type Membership struct {
 	OrganizationID int64  `json:"organizationId" db:"organization_id"`
 	Role           string `json:"role" db:"role"`
 }
+
+type Feedback struct {
+	ID        int64          `json:"id" db:"id"`
+	Content   string         `json:"content" db:"content"`
+	Email     sql.NullString `json:"email" db:"email"`
+	Product   sql.NullString `json:"product" db:"product"`
+	CreatedAt time.Time      `json:"createdAt" db:"created_at"`
+}

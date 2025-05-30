@@ -101,3 +101,11 @@ type TokenValidationResponse struct {
 	Organizations []OrganizationDTO `json:"orgs"`
 	Memberships   []db.Membership   `json:"memberships"`
 }
+
+type FeedbackDTO struct {
+	ID        int64     `json:"id"`
+	Content   string    `json:"content"`
+	Email     *string   `json:"email"`
+	Product   *string   `json:"product"`
+	CreatedAt time.Time `json:"createdAt"`
+}
