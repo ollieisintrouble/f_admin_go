@@ -44,6 +44,7 @@ func Register(w http.ResponseWriter, r *http.Request, authenticator *shared.Simp
 		HttpOnly: true,
 		Secure:   true,
 		Path:     "/",
+		SameSite: http.SameSiteNoneMode,
 	})
 
 	w.WriteHeader(http.StatusOK)

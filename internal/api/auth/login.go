@@ -49,6 +49,7 @@ func Login(w http.ResponseWriter, r *http.Request, authenticator *shared.SimpleA
 		HttpOnly: true,
 		Secure:   true,
 		Path:     "/",
+		SameSite: http.SameSiteNoneMode,
 	})
 
 	w.WriteHeader(http.StatusOK)
