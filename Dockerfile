@@ -6,7 +6,6 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-COPY .env .env
 
 RUN go build -o f_admin ./cmd/f_admin
 
