@@ -11,7 +11,6 @@ import (
 func Register(w http.ResponseWriter, r *http.Request, authenticator *shared.SimpleAuthenticator) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "*")
-	w.Header().Set("Access-Control-Allow-Credentials", "true")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
 	if r.Method == http.MethodOptions {
@@ -38,14 +37,9 @@ func Register(w http.ResponseWriter, r *http.Request, authenticator *shared.Simp
 		return
 	}
 
-	http.SetCookie(w, &http.Cookie{
-		Name:     "authToken",
-		Value:    token,
-		HttpOnly: true,
-		Secure:   true,
-		Path:     "/",
-		SameSite: http.SameSiteNoneMode,
-	})
+	res := map[string]string{
+		"token": token,
+	}
 
-	w.WriteHeader(http.StatusOK)
+	shared.WriteJSON(w, http.StatusCreated, res)
 }
